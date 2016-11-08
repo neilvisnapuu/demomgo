@@ -4,6 +4,7 @@ package demomgo
 import (
         "fmt"
 	"log"
+        "time"
         "gopkg.in/mgo.v2"
         "gopkg.in/mgo.v2/bson"
 )
@@ -13,7 +14,33 @@ type Person struct {
         Phone string
 }
 
+type Blathering struct {
+        Blather string
+        Timestamp time.Time
+}
 
+
+func BlatherMe(b string) {
+
+        fmt.Println("hi neil ", b)
+
+        session, err := mgo.Dial("localhost")
+        if err != nil {
+                panic(err)
+        }
+        defer session.Close()
+
+        // Optional. Switch the session to a monotonic behavior.
+        session.SetMode(mgo.Monotonic, true)
+
+        c := session.DB("test").C("blatherings")
+        err = c.Insert(&Blathering{b, time.Now()})
+        if err != nil {
+                log.Fatal(err)
+        }
+
+
+}
 
 func BlahInsert() {
 
