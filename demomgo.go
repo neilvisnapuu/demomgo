@@ -7,9 +7,9 @@ import (
         "time"
         "gopkg.in/mgo.v2"
         "gopkg.in/mgo.v2/bson"
-        "text/template"
-        "os"
-        "bytes"
+//        "text/template"
+//        "os"
+//        "bytes"
 
 )
 
@@ -25,7 +25,7 @@ type Blathering struct {
 
 
 
-func FullReport(anchor string) string {
+func FullReport(anchor string) []Blathering {
 
     var results []Blathering
     session, err := mgo.Dial("localhost,localhost")
@@ -44,20 +44,20 @@ func FullReport(anchor string) string {
     fmt.Println("Results All: ", results)
 
 
-    tmpl, err := template.New("test").Parse("{{ . }}")
-    if err != nil { panic(err) }
-    err = tmpl.Execute(os.Stdout, results)
-    if err != nil { panic(err) }
+//    tmpl, err := template.New("test").Parse("{{ . }}")
+  //  if err != nil { panic(err) }
+    //err = tmpl.Execute(os.Stdout, results)
+    //if err != nil { panic(err) }
 
 
-    buf := new(bytes.Buffer)
-    tmpl.Execute(buf, results)
 
+    // buf := new(bytes.Buffer)
+    // tmpl.Execute(buf, results)
+    // fmt.Println("Results From the Crazy Template Stuff: ", buf.String())
+    // return buf.String()
 
-    fmt.Println("Results From the Crazy Template Stuff: ", buf.String())
+    return results
 
-
-    return buf.String()
 
 }
 
