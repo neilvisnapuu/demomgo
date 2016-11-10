@@ -62,6 +62,50 @@ func FullReport(anchor string) []Blathering {
 }
 
 
+
+
+func PruneMe(rs string, bs string)  {
+    session, err := mgo.Dial("localhost,localhost")
+    if err != nil {
+        panic(err)
+    }
+    defer session.Close()
+    // Optional. Switch the session to a monotonic behavior.
+    session.SetMode(mgo.Monotonic, true)
+    cst := session.DB("test").C("blatherings")
+    // note that we added the iteration check, as order of calling might help tune
+//    colQuerier := bson.M{"name": bson.RegEx{rs,"i"}}
+    colQuerier := bson.M{"blather": bson.RegEx{rs,"i"}}
+    changedDocs, err := cst.RemoveAll(colQuerier)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("Changed Docs: ", changedDocs)
+
+}
+
+
+func UpdateMe(rs string, bs string)  {
+    session, err := mgo.Dial("localhost,localhost")
+    if err != nil {
+        panic(err)
+    }
+    defer session.Close()
+    // Optional. Switch the session to a monotonic behavior.
+    session.SetMode(mgo.Monotonic, true)
+    cst := session.DB("test").C("blatherings")
+    // note that we added the iteration check, as order of calling might help tune
+//    colQuerier := bson.M{"name": bson.RegEx{rs,"i"}}
+    colQuerier := bson.M{"blather": bson.RegEx{rs,"i"}}
+    change := bson.M{"$set": bson.M{"blather":bs}}
+    changedDocs, err := cst.UpdateAll(colQuerier, change)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("Changed Docs: ", changedDocs)
+}
+
+
 func BlatherMe(b string) {
 
         fmt.Println("hi neil ", b)
